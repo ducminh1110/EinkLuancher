@@ -158,6 +158,7 @@ abstract class FilePage extends Page implements PagedGridView.Adapter, ToolbarVi
                 }
             });
         }
+        extraActions(m, f);
         m.add(str(R.string.rename), new EinkMenu.Action() {
             @Override
             public void run() {
@@ -203,6 +204,9 @@ abstract class FilePage extends Page implements PagedGridView.Adapter, ToolbarVi
         m.showCentered(grid, f.name);
         return true;
     }
+
+    /** Page specific entries for the long-press menu. */
+    void extraActions(EinkMenu m, FileItem f) {}
 
     /** Called after rename/delete/new folder. */
     void onFilesChanged() {

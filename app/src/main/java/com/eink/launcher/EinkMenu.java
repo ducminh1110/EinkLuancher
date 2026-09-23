@@ -218,7 +218,7 @@ final class EinkMenu {
         return b;
     }
 
-    private static LinearLayout buttons(Context c, String cancel, String ok, View.OnClickListener onCancel,
+    static LinearLayout buttons(Context c, String cancel, String ok, View.OnClickListener onCancel,
                                         View.OnClickListener onOk) {
         LinearLayout row = new LinearLayout(c);
         row.setOrientation(LinearLayout.HORIZONTAL);

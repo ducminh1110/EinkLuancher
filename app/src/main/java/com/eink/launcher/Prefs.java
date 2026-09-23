@@ -3,7 +3,9 @@ package com.eink.launcher;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /** Launcher preferences (thin wrapper over SharedPreferences). */
@@ -25,6 +27,7 @@ final class Prefs {
     static final String START_TAB = "start_tab";
     static final String LIB_COLS = "lib_cols";
     static final String BUILTIN_READER = "builtin_reader";
+    static final String LIB_FOLDERS = "lib_folders";     // book folders, one path per line
     static final String READER_SIZE = "reader_size";
     static final String READER_FACE = "reader_face";       // 0 sans, 1 serif, 2 mono
     static final String READER_SPACING = "reader_spacing";
@@ -111,6 +114,23 @@ final class Prefs {
 
     static float progress(String path) {
         return recent.getFloat("prog:" + path, 0f);
+    }
+
+    static List<String> libFolders() {
+        List<String> out = new ArrayList<>();
+        for (String p : str(LIB_FOLDERS, "").split("\n")) {
+            if (p.trim().length() > 0) out.add(p.trim());
+        }
+        return out;
+    }
+
+    static void setLibFolders(List<String> paths) {
+        StringBuilder b = new StringBuilder();
+        for (String p : paths) {
+            if (b.length() > 0) b.append('\n');
+            b.append(p);
+        }
+        put(LIB_FOLDERS, b.toString());
     }
 
     static String lang() {

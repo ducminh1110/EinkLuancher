@@ -204,6 +204,25 @@ final class StoragePage extends FilePage {
     }
 
     @Override
+    void extraActions(EinkMenu m, final FileItem f) {
+        if (!f.dir) return;
+        m.add(str(R.string.lib_set_folder), new EinkMenu.Action() {
+            @Override
+            public void run() {
+                BookFolders.add(act, f.file, true, null);
+            }
+        });
+        if (!Prefs.libFolders().isEmpty() && !Prefs.libFolders().contains(f.file.getPath())) {
+            m.add(str(R.string.lib_add_to_folders), new EinkMenu.Action() {
+                @Override
+                public void run() {
+                    BookFolders.add(act, f.file, false, null);
+                }
+            });
+        }
+    }
+
+    @Override
     void onFilesChanged() {
         load(false);
     }

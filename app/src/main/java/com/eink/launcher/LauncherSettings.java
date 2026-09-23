@@ -270,6 +270,23 @@ final class LauncherSettings implements PagedGridView.Adapter, PagedGridView.Pag
         });
         rows.add(new Row() {
             public String label() {
+                return s(R.string.lib_folders);
+            }
+
+            public String value() {
+                return BookFolders.summary(act);
+            }
+
+            public void click() {
+                BookFolders.show(act, list, new Runnable() {
+                    public void run() {
+                        list.invalidate();
+                    }
+                });
+            }
+        });
+        rows.add(new Row() {
+            public String label() {
                 return s(R.string.rescan);
             }
 

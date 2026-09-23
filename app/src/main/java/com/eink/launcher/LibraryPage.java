@@ -63,8 +63,10 @@ final class LibraryPage extends FilePage implements Library.Listener {
         sort();
         if (Library.isScanning() && items.isEmpty()) grid.setEmptyText(str(R.string.scanning));
         else if (query.length() > 0) grid.setEmptyText(str(R.string.no_results));
+        else if (!Prefs.libFolders().isEmpty()) grid.setEmptyText(str(R.string.no_books_in_folders));
         else grid.setEmptyText(str(R.string.no_books));
-        footer.setInfo(str(R.string.total_books, Library.books().size())
+        String where = Prefs.libFolders().isEmpty() ? "" : "  ·  " + BookFolders.summary(act);
+        footer.setInfo(str(R.string.total_books, Library.books().size()) + where
                 + (Library.isScanning() ? "  ·  " + str(R.string.scanning_short) : ""));
     }
 
@@ -156,6 +158,12 @@ final class LibraryPage extends FilePage implements Library.Listener {
                 }
             });
         }
+        m.add(str(R.string.lib_folders_menu), new EinkMenu.Action() {
+            @Override
+            public void run() {
+                BookFolders.show(act, grid, null);
+            }
+        });
         m.add(str(R.string.rescan), new EinkMenu.Action() {
             @Override
             public void run() {

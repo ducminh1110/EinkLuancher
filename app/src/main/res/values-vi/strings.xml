@@ -115,4 +115,19 @@
     <string name="font_serif">Serif</string>
     <string name="font_mono">Mono</string>
     <string name="opt_builtin_reader">Trình đọc sách tích hợp</string>
+    <string name="lib_folders">Thư mục sách</string>
+    <string name="lib_folders_menu">Thư mục sách…</string>
+    <string name="lib_all_storage">Toàn bộ bộ nhớ</string>
+    <string name="lib_add_folder">Thêm thư mục…</string>
+    <string name="lib_scan_all">Quét toàn bộ bộ nhớ</string>
+    <string name="lib_remove_folder">Bỏ thư mục này khỏi Thư viện?</string>
+    <string name="lib_set_folder">Đặt làm thư mục sách</string>
+    <string name="lib_add_to_folders">Thêm vào thư mục sách</string>
+    <string name="lib_n_folders">%d thư mục</string>
+    <string name="lib_folder_set">Thư viện: %s</string>
+    <string name="no_books_in_folders">Không có sách trong thư mục đã chọn\nMenu ≡ → Thư mục sách… để đổi</string>
+    <string name="choose_folder">Chọn thư mục</string>
+    <string name="select_folder">Chọn thư mục này</string>
+    <string name="open_folder_first">Hãy mở một thư mục trước</string>
+    <string name="no_subfolders">Không có thư mục con\nBấm "Chọn thư mục này" để dùng thư mục này</string>
 </resources>

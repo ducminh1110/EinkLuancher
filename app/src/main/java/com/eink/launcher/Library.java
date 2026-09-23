@@ -47,7 +47,7 @@ final class Library {
     private static List<FileItem> apks = new ArrayList<>();
     private static Listener listener;
     private static Listener storeListener;
-    private static boolean scanning, cacheLoaded;
+    private static boolean scanning, cacheLoaded, rescanPending;
     private static long lastScan;
 
     private Library() {}
@@ -153,11 +153,15 @@ final class Library {
 
     /** Rescans storages unless a scan ran within {@code maxAgeMs}. */
     static void scan(Context ctx, long maxAgeMs) {
-        if (scanning) return;
+        if (scanning) {
+            if (maxAgeMs == 0) rescanPending = true;
+            return;
+        }
         if (maxAgeMs > 0 && System.currentTimeMillis() - lastScan < maxAgeMs) return;
         scanning = true;
         final Context app = ctx.getApplicationContext();
         final List<FileItem> roots = roots(app);
+        final List<File> folders = folders();
         notifyListeners();
         Worker.io(new Runnable() {
             @Override
@@ -165,14 +169,37 @@ final class Library {
                 final List<FileItem> b = new ArrayList<>(), a = new ArrayList<>();
                 ArrayDeque<File> dirs = new ArrayDeque<>();
                 ArrayDeque<Integer> depth = new ArrayDeque<>();
-                for (FileItem r : roots) {
-                    dirs.push(r.file);
-                    depth.push(0);
+                ArrayDeque<Boolean> apkOnly = new ArrayDeque<>();
+                if (folders.isEmpty()) {
+                    // Whole storage.
+                    for (FileItem r : roots) {
+                        dirs.push(r.file);
+                        depth.push(0);
+                        apkOnly.push(false);
+                    }
+                } else {
+                    // Only the chosen book folders; APKs (Store tab) still come from Download.
+                    for (File f : folders) {
+                        dirs.push(f);
+                        depth.push(0);
+                        apkOnly.push(false);
+                    }
+                    for (FileItem r : roots) {
+                        for (String n : new String[]{"Download", "download", "Downloads"}) {
+                            File d = new File(r.file, n);
+                            if (d.isDirectory()) {
+                                dirs.push(d);
+                                depth.push(7);
+                                apkOnly.push(true);
+                            }
+                        }
+                    }
                 }
                 HashSet<String> seen = new HashSet<>();
                 while (!dirs.isEmpty() && b.size() + a.size() < MAX_FILES) {
                     File dir = dirs.pop();
                     int d = depth.pop();
+                    boolean onlyApk = apkOnly.pop();
                     File[] list = dir.listFiles();
                     if (list == null) continue;
                     for (File f : list) {
@@ -182,11 +209,12 @@ final class Library {
                             if (d < 9 && !SKIP.contains(name.toLowerCase(Locale.US))) {
                                 dirs.push(f);
                                 depth.push(d + 1);
+                                apkOnly.push(onlyApk);
                             }
                             continue;
                         }
                         String ext = Text.ext(name);
-                        boolean book = isBook(name, ext);
+                        boolean book = !onlyApk && isBook(name, ext);
                         if (!book && !"apk".equals(ext)) continue;
                         String key = name + "|" + f.length();
                         if (!seen.add(key)) continue; // same file visible through two mount points
@@ -205,10 +233,60 @@ final class Library {
                         lastScan = now;
                         scanning = false;
                         notifyListeners();
+                        if (rescanPending) {
+                            rescanPending = false;
+                            scan(app, 0);
+                        }
                     }
                 });
             }
         });
+    }
+
+    // ----------------------------------------------------------- book folders
+
+    /** Folders chosen in "Book folders"; empty = scan the whole storage. */
+    static List<File> folders() {
+        List<File> out = new ArrayList<>();
+        for (String p : Prefs.libFolders()) {
+            File f = new File(p);
+            if (f.isDirectory()) out.add(f);
+        }
+        return out;
+    }
+
+    /** Applies a new folder selection: hide books outside it right away, then rescan. */
+    static void applyFolders(Context c) {
+        List<File> folders = folders();
+        if (!folders.isEmpty()) {
+            List<FileItem> nb = new ArrayList<>();
+            for (FileItem f : books) {
+                if (inFolders(f.file, folders)) nb.add(f);
+            }
+            books = nb;
+        }
+        notifyListeners();
+        scan(c, 0);
+    }
+
+    private static boolean inFolders(File f, List<File> folders) {
+        String p = f.getPath();
+        for (File d : folders) {
+            String dp = d.getPath();
+            if (p.startsWith(dp.endsWith("/") ? dp : dp + "/")) return true;
+        }
+        return false;
+    }
+
+    /** "SD card/Books" style name for a path. */
+    static String displayPath(Context c, File f) {
+        String p = f.getPath();
+        for (FileItem r : roots(c)) {
+            String rp = r.file.getPath();
+            if (p.equals(rp)) return r.label;
+            if (p.startsWith(rp + "/")) return r.label + p.substring(rp.length());
+        }
+        return p;
     }
 
     private static void notifyListeners() {

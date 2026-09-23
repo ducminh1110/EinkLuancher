@@ -14,7 +14,7 @@ Launcher kiểu BOOX kèm **trình đọc sách tích hợp**, viết cho máy �
 
 ## Cài đặt
 
-1. Chép file [`release/EinkLauncher-1.0.apk`](release/EinkLauncher-1.0.apk) vào máy rồi cài. Nếu máy chặn, bật *Cài đặt → Bảo mật → Nguồn không xác định*.
+1. Tải [`release/EinkLauncher.apk`](release/EinkLauncher.apk) (v1.1), chép vào máy rồi cài. Nếu máy chặn, bật *Cài đặt → Bảo mật → Nguồn không xác định*.
 2. Bấm nút **Home**, chọn **E-ink Launcher**, rồi chọn **Luôn luôn**.
    Có thể đổi lại sau trong *Settings → Launcher → Default launcher*.
 
@@ -33,6 +33,9 @@ Launcher kiểu BOOX kèm **trình đọc sách tích hợp**, viết cho máy �
 - Tự tìm sách trên bộ nhớ trong và thẻ SD.
 - Có ảnh bìa cho EPUB, FB2, MOBI/AZW3, CBZ. PDF và TXT dùng bìa vẽ sẵn.
 - Hiện % đã đọc trên bìa, sắp xếp theo *đọc gần đây*.
+- **Chọn thư mục chứa sách**: menu ≡ → *Book folders…* → *Add folder…*. Có thể chọn nhiều thư mục, hoặc *Scan whole storage* để quét lại toàn bộ.
+  Cách nhanh: trong tab Storage, nhấn giữ một thư mục → *Set as Library folder*.
+  Khi đã chọn thư mục, Library chỉ quét các thư mục đó (nhanh hơn trên thẻ SD chậm). Tab Store vẫn tìm file `.apk` trong thư mục Download.
 
 **Storage**
 - Trình quản lý tệp dạng lưới hoặc danh sách.
@@ -72,7 +75,7 @@ Launcher kiểu BOOX kèm **trình đọc sách tích hợp**, viết cho máy �
 - **Icon vẽ bằng vector.** Không tốn bộ nhớ ảnh. Ảnh bìa và icon chỉ nạp cho trang đang xem, lưu dạng RGB_565 và có cache trên đĩa.
 - **Trình đọc chỉ nạp một chương mỗi lần.** TXT được đọc từng đoạn khoảng 48 KB, nên sách lớn cỡ nào cũng dùng lượng RAM như nhau.
 - **Nhẹ.** Không dùng AndroidX, không có thư viện native, vẽ bằng phần mềm (không tạo ngữ cảnh GPU).
-- **Số đo trên emulator 4.4.2:** APK 105 KB, cả tiến trình (launcher + trình đọc) khoảng 8–10 MB PSS.
+- **Số đo trên emulator 4.4.2:** APK 110 KB, cả tiến trình (launcher + trình đọc) khoảng 8–10 MB PSS.
 
 ## Build từ mã nguồn
 

@@ -121,4 +121,20 @@
     <string name="font_serif">Serif</string>
     <string name="font_mono">Mono</string>
     <string name="opt_builtin_reader">Built-in book reader</string>
+    <!-- Book folders -->
+    <string name="lib_folders">Book folders</string>
+    <string name="lib_folders_menu">Book folders…</string>
+    <string name="lib_all_storage">Whole storage</string>
+    <string name="lib_add_folder">Add folder…</string>
+    <string name="lib_scan_all">Scan whole storage</string>
+    <string name="lib_remove_folder">Remove from Library?</string>
+    <string name="lib_set_folder">Set as Library folder</string>
+    <string name="lib_add_to_folders">Add to Library folders</string>
+    <string name="lib_n_folders">%d folders</string>
+    <string name="lib_folder_set">Library: %s</string>
+    <string name="no_books_in_folders">No books in the chosen folders\nMenu ≡ → Book folders… to change</string>
+    <string name="choose_folder">Choose a folder</string>
+    <string name="select_folder">Select this folder</string>
+    <string name="open_folder_first">Open a folder first</string>
+    <string name="no_subfolders">No sub-folders\nTap "Select this folder" to use this one</string>
 </resources>
