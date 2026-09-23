@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.eink.launcher'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.eink.launcher'
+        // Android 4.4.2 KitKat (API 19), ARM Cortex-A9 / armeabi-v7a, Dalvik.
+        // Pure Java, no native libraries, no AndroidX -> tiny APK, low RAM.
+        minSdk 19
+        targetSdk 22
+        versionCode 1
+        versionName '1.0'
+        resourceConfigurations += ['en', 'vi']
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Signed with the debug key so the release APK can be installed directly.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+        disable 'ExpiredTargetSdkVersion', 'OldTargetApi'
+    }
+}
