@@ -89,15 +89,10 @@ final class Library {
         String env = System.getenv("SECONDARY_STORAGE");
         if (env != null) cands.addAll(Arrays.asList(env.split(":")));
         try {
-            File[] dirs = c.getExternalFilesDirs(null);
-            if (dirs != null) {
-                for (File d : dirs) {
-                    if (d == null) continue;
-                    String p = d.getPath();
-                    int i = p.indexOf("/Android/data/");
-                    if (i > 0) cands.add(p.substring(0, i));
-                }
-            }
+            // Hidden but present on 4.x; unlike getExternalFilesDirs() it creates no folders.
+            Object sm = c.getSystemService(Context.STORAGE_SERVICE);
+            String[] vols = (String[]) sm.getClass().getMethod("getVolumePaths").invoke(sm);
+            if (vols != null) cands.addAll(Arrays.asList(vols));
         } catch (Throwable ignored) {
         }
         cands.addAll(Arrays.asList("/storage/sdcard1", "/storage/extSdCard", "/mnt/extsd", "/mnt/external_sd",
